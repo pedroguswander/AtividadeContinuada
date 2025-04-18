@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Apolice {
+	private String numero;
 	private Veiculo veiculo;
 	private BigDecimal valorFranquia;
 	private BigDecimal valorPremio;
