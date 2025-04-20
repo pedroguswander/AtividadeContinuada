@@ -6,6 +6,22 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class SeguradoMediator {
+    static private SeguradoMediator instancia;
+
+    private SeguradoMediator()
+    {
+
+    }
+
+    static public SeguradoMediator getInstancia()
+    {
+        if (instancia == null)
+        {
+            instancia = new SeguradoMediator();
+        }
+        return instancia;
+    }
+
     public String validarNome(String nome) {
         return null;
     }

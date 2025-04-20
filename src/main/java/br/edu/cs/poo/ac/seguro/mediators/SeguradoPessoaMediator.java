@@ -1,8 +1,25 @@
 package br.edu.cs.poo.ac.seguro.mediators;
 
+import br.edu.cs.poo.ac.seguro.daos.SeguradoPessoaDAO;
 import br.edu.cs.poo.ac.seguro.entidades.SeguradoPessoa;
 
 public class SeguradoPessoaMediator {
+    private SeguradoMediator seguradoMediator;
+    private SeguradoPessoaDAO seguradoPessoaDAO;
+    static private SeguradoPessoaMediator instancia;
+
+    private SeguradoPessoaMediator() {
+    }
+
+    static public SeguradoPessoaMediator getInstancia()
+    {
+        if (instancia == null)
+        {
+            instancia = new SeguradoPessoaMediator();
+        }
+        return instancia;
+    }
+
     public String validarCpf(String cpf) {
         return null;
     }
