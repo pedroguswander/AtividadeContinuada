@@ -14,8 +14,9 @@ public class Apolice {
 	private BigDecimal valorPremio;
 	private BigDecimal valorMaximoSegurado;
 	
-	public Apolice(Veiculo veiculo, BigDecimal valorFranquia, BigDecimal valorPremio, BigDecimal valorMaximoSegurado) {
+	public Apolice(String numero, Veiculo veiculo, BigDecimal valorFranquia, BigDecimal valorPremio, BigDecimal valorMaximoSegurado) {
 		super();
+		this.numero = numero;
 		this.veiculo = veiculo;
 		this.valorFranquia = valorFranquia;
 		this.valorPremio = valorPremio;
