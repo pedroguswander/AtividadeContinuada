@@ -29,7 +29,7 @@ public enum TipoSinistro {
 		case 5:
 			return TipoSinistro.DEPREDACAO;
 		default:
-			return TipoSinistro.COLISAO;
+			return null;
 		}
 	}
 }

@@ -26,7 +26,7 @@ public class TesteSinistroDAO extends TesteDAO{
         Assertions.assertTrue(ret);
     }
 
-    @Test //excluir um Sinistro que  não existe
+    @Test //excluir um Sinistro que não existe
     public void teste02() {
         String numero = "02";
         cadastro.incluir((Serializable) new Sinistro(numero, null, null,
@@ -51,8 +51,6 @@ public class TesteSinistroDAO extends TesteDAO{
         Sinistro sinistro = new Sinistro(numero, null, null, null,
                 null, BigDecimal.ZERO, TipoSinistro.COLISAO);
         cadastro.incluir(sinistro, numero);
-        sinistro = new Sinistro(numero, null, null, null,
-                null, BigDecimal.ONE, TipoSinistro.COLISAO);
         boolean ret = dao.alterar(sinistro);
         Assertions.assertTrue(ret);
     }

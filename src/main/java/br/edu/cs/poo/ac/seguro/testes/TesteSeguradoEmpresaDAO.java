@@ -5,7 +5,6 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import br.edu.cs.poo.ac.seguro.daos.SeguradoEmpresaDAO;
 import br.edu.cs.poo.ac.seguro.entidades.SeguradoEmpresa;
 
@@ -21,6 +20,7 @@ public class TesteSeguradoEmpresaDAO extends TesteDAO {
         cadastro.incluir(new SeguradoEmpresa("TESTE1", null, LocalDate.now(), BigDecimal.ZERO,
                 cnpj, 1000.0, false), cnpj);
         SeguradoEmpresa seg = dao.buscar(cnpj);
+        System.out.println(seg);
         Assertions.assertNotNull(seg);
     }
     @Test

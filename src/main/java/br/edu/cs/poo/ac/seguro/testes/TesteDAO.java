@@ -9,7 +9,7 @@ import br.edu.cs.poo.ac.seguro.daos.SeguradoEmpresaDAO;
 import br.edu.cs.poo.ac.seguro.entidades.SeguradoEmpresa;
 
 public abstract class TesteDAO extends TesteAbstrato {
-    protected CadastroObjetos cadastro;
+    /*protected CadastroObjetos cadastro;
 
     protected abstract Class getClasse();
 
@@ -22,9 +22,12 @@ public abstract class TesteDAO extends TesteAbstrato {
         String sep = File.separator;
         File dir = new File("." + sep + getClasse().getSimpleName());
         File[] files = dir.listFiles();
-        assert files != null;
-        for (File file : files) {
-            file.delete();
+        if (files != null)
+        {
+            for (File file : files) {
+                file.delete();
+            }
         }
-    }
+
+    }*/
 }

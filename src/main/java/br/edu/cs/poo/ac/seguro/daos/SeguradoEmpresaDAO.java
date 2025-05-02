@@ -6,7 +6,7 @@ import br.edu.cs.poo.ac.seguro.entidades.SeguradoPessoa;
 
 public class SeguradoEmpresaDAO extends DAOGenerico {
     public SeguradoEmpresaDAO() {
-        cadastro = new CadastroObjetos(SeguradoPessoa.class);
+        cadastro = new CadastroObjetos(SeguradoEmpresa.class);
     }
 
     public SeguradoEmpresa buscar(String cnpj) {

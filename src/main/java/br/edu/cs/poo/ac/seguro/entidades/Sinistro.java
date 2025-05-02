@@ -20,6 +20,7 @@ public class Sinistro implements Serializable {
 	public Sinistro(String numero, Veiculo veiculo, LocalDateTime dataHoraSinistro, LocalDateTime dataHoraRegistro,
 			String usuarioRegistro, BigDecimal valorSinistro, TipoSinistro tipo) {
 		super();
+		this.numero = numero;
 		this.veiculo = veiculo;
 		this.dataHoraSinistro = dataHoraSinistro;
 		this.dataHoraRegistro = dataHoraRegistro;
