@@ -45,7 +45,7 @@ public class SeguradoEmpresaMediator {
 
         boolean sucesso = seguradoEmpresaDAO.incluir(seg);
         if (!sucesso) {
-            return "Já existe um segurado com esse CNPJ";
+            return "CNPJ do segurado empresa já existente";
         }
         return null;
     }
@@ -57,7 +57,7 @@ public class SeguradoEmpresaMediator {
 
         boolean sucesso = seguradoEmpresaDAO.alterar(seg);
         if (!sucesso) {
-            return "Segurado não encontrado";
+            return "CNPJ do segurado empresa não existente";
         }
         return null;
     }
@@ -69,7 +69,7 @@ public class SeguradoEmpresaMediator {
 
         boolean sucesso = seguradoEmpresaDAO.excluir(cnpj);
         if (!sucesso) {
-            return "Segurado não encontrado";
+            return "CNPJ do segurado empresa não existente";
         }
         return null;
     }
@@ -86,18 +86,28 @@ public class SeguradoEmpresaMediator {
             return "Segurado inválido";
         }
 
-        String erro = validarCnpj(seg.getCnpj());
-        if (erro != null) return erro;
-
         if (seg.getNome() == null || seg.getNome().trim().isEmpty()) {
-            return "Nome inválido";
+            return "Nome deve ser informado";
         }
 
-        erro = validarFaturamento(seg.getFaturamento());
+        if (seg.getEndereco() == null) {
+            return "Endereço deve ser informado";
+        }
+
+        if (seg.getDataAbertura() == null) {
+            return "Data da abertura deve ser informada";
+        }
+
+        String erro = validarCnpj(seg.getCnpj());
         if (erro != null) {
             return erro;
         }
 
+        if (seg.getFaturamento() <= 0.0) {
+            return "Faturamento deve ser maior que zero";
+        }
+
         return null;
     }
+
 }
