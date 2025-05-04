@@ -8,6 +8,9 @@ public class SeguradoEmpresa extends Segurado implements Serializable {
     private String cnpj;
     private double faturamento;
     private boolean ehLocadoraDeVeiculos;
+    public SeguradoEmpresa() {
+        super();
+    }
 
     public SeguradoEmpresa(
         String nome,

@@ -17,6 +17,9 @@ public class Segurado {
         this.dataCriacao = dataCriacao;
         this.bonus = bonus;
     }
+    public Segurado() {
+
+    }
 
     public String getNome() {
         return nome;
