@@ -55,14 +55,16 @@ public class TesteSeguradoEmpresaMediator extends TesteMediator {
     @Test
     public void test07() {
         String cnpj = "11851715000174";
-        Endereco end = new Endereco("Rua A", "51020002", "22", "ap 201", "Brasil", "PE",
-                "Recife");
+        Endereco end = new Endereco("Rua A", "51020002", "22", "ap 201", "Brasil", "PE", "Recife");
         SeguradoEmpresa seg = new SeguradoEmpresa("ACME LTDA", end, LocalDate.now(),
                 BigDecimal.ZERO, cnpj, 1000.0, false);
-        cadastro.incluir(seg, cnpj);
+
+        med.incluirSeguradoEmpresa(seg);
+
         SeguradoEmpresa segBuscado = med.buscarSeguradoEmpresa(cnpj);
         assertNotNull(segBuscado);
     }
+
     @Test
     public void test08() {
         String cnpj = "11851715000274";

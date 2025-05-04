@@ -23,15 +23,17 @@ public class SeguradoEmpresaMediator {
     public String validarCnpj(String cnpj) {
         if (cnpj == null || cnpj.trim().isEmpty()) {
             return "CNPJ deve ser informado";
-        }
-        else if (!cnpj.matches("\\d{14}")) {
+        } else if (!ValidadorCpfCnpj.ehCnpjValido(cnpj)) {
             return "CNPJ deve ter 14 caracteres";
+        }else if (cnpj.substring(12,14).equals("74") == false ) {
+            return "CNPJ com dígito inválido";
         }
         return null;
     }
+
     public String validarFaturamento(double faturamento) {
-        if (faturamento < 0) {
-            return "Faturamento inválido";
+        if (faturamento <= 0) {
+            return "Faturamento deve ser maior que zero";
         }
         return null;
     }
