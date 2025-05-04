@@ -7,7 +7,9 @@ import java.time.LocalDate;
 public class SeguradoPessoa extends Segurado implements Serializable {
     private String cpf;
     private double renda;
-
+    public SeguradoPessoa() {
+        super();
+    }
     public SeguradoPessoa(
         String nome,
         Endereco endereco,
