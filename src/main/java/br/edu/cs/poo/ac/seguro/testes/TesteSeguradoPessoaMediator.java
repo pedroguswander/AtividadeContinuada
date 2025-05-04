@@ -217,7 +217,7 @@ public class TesteSeguradoPessoaMediator extends TesteMediator {
                 BigDecimal.ZERO, cpfOri, 1000.0);
         cadastro.incluir(seg, cpfOri);
         String ret = med.excluirSeguradoPessoa(cpf);
-        assertEquals("CPF do segurado pessoa não existente", ret);
+        assertEquals("CPF com dígito inválido", ret);
         SeguradoPessoa segBuscado = med.buscarSeguradoPessoa(cpfOri);
         assertNotNull(segBuscado);
     }
