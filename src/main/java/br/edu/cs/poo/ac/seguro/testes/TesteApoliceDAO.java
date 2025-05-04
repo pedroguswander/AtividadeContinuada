@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class TesteApoliceDAO extends ApoliceDAO {
     private ApoliceDAO dao = new ApoliceDAO();
@@ -20,7 +21,7 @@ public class TesteApoliceDAO extends ApoliceDAO {
     public void teste01() {
         String numero = "01";
         cadastro.incluir((Serializable) new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO,
-                BigDecimal.ZERO), numero);
+                BigDecimal.ZERO, LocalDate.now()), numero);
         boolean ret = dao.excluir(numero);
         Assertions.assertTrue(ret);
     }
@@ -29,14 +30,14 @@ public class TesteApoliceDAO extends ApoliceDAO {
     public void teste02() {
         String numero = "02";
         cadastro.incluir((Serializable) new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO,
-                BigDecimal.ZERO), numero);
+                BigDecimal.ZERO, LocalDate.now()), numero);
         boolean ret = dao.excluir("03");
         Assertions.assertFalse(ret);
     }
 
     @Test void teste03() {
         String numero = "03";
-        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO);
+        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO, LocalDate.now());
         cadastro.incluir(apolice, numero);
         boolean ret = dao.incluir(apolice);
         Assertions.assertFalse(ret);
@@ -44,16 +45,16 @@ public class TesteApoliceDAO extends ApoliceDAO {
 
     @Test void teste04() {
         String numero = "04";
-        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO);
+        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO, LocalDate.now());
         cadastro.incluir(apolice, numero);
-        apolice = new Apolice(numero, null, BigDecimal.ONE,  BigDecimal.ZERO, BigDecimal.ZERO);
+        apolice = new Apolice(numero, null, BigDecimal.ONE,  BigDecimal.ZERO, BigDecimal.ZERO, LocalDate.now());
         boolean ret = dao.alterar(apolice);
         Assertions.assertTrue(ret);
     }
 
     @Test void teste05() {
         String numero = "05";
-        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO);
+        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO, LocalDate.now());
         cadastro.incluir(apolice, numero);
         Apolice apolice1 = dao.buscar(numero);
         Assertions.assertNotNull(apolice1);
@@ -61,7 +62,7 @@ public class TesteApoliceDAO extends ApoliceDAO {
 
     @Test void teste06() {
         String numero = "06";
-        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO);
+        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO, LocalDate.now());
         cadastro.incluir(apolice, numero);
         Apolice apolice1 = dao.buscar("07");
         Assertions.assertNull(apolice1);
@@ -69,7 +70,7 @@ public class TesteApoliceDAO extends ApoliceDAO {
 
     @Test void teste07() {
         String numero = "07";
-        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO);
+        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO, LocalDate.now());
         boolean ret = dao.alterar(apolice);
         Assertions.assertFalse(ret);
         Apolice apolice1 = dao.buscar(numero);
@@ -78,7 +79,7 @@ public class TesteApoliceDAO extends ApoliceDAO {
 
     @Test void teste08() {
         String numero = "08";
-        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO);
+        Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO, LocalDate.now());
         cadastro.incluir(apolice, numero);
         boolean ret = dao.incluir(apolice);
         Assertions.assertTrue(ret);
