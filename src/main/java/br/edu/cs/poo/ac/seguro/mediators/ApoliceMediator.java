@@ -4,6 +4,7 @@ import br.edu.cs.poo.ac.seguro.daos.*;
 import br.edu.cs.poo.ac.seguro.entidades.Apolice;
 import br.edu.cs.poo.ac.seguro.entidades.Sinistro;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class ApoliceMediator {
@@ -40,7 +41,7 @@ public class ApoliceMediator {
     }
 
     public String excluirApolice(String numero) {
-        if (numero == null || numero.isEmpty()) {
+        if (numero == null || numero.isBlank()) {
             return "Número deve ser informado";
         }
         if (!daoApo.excluir(numero))
@@ -48,6 +49,11 @@ public class ApoliceMediator {
             return "Apólice inexistente";
         }
 
+        Serializable[] sinistros = daoSin.buscarTodos();
+        for (Serializable sinistro : sinistros)
+        {
+
+        }
         return "Existe sinistro cadastrado para o veículo em questão e no mesmo ano da apólice";
     }
 

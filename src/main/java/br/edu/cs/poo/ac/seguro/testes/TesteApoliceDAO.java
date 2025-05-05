@@ -82,7 +82,7 @@ public class TesteApoliceDAO extends ApoliceDAO {
         Apolice apolice = new Apolice(numero, null, BigDecimal.ZERO,  BigDecimal.ZERO, BigDecimal.ZERO, LocalDate.now());
         cadastro.incluir(apolice, numero);
         boolean ret = dao.incluir(apolice);
-        Assertions.assertTrue(ret);
+        Assertions.assertFalse(ret);
         Apolice apolice1 = dao.buscar(numero);
         Assertions.assertNotNull(apolice1);
 

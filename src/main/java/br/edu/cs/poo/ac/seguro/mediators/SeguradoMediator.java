@@ -99,7 +99,12 @@ public class SeguradoMediator {
         return null;
     }
     public BigDecimal ajustarDebitoBonus(BigDecimal bonus, BigDecimal valorDebito) {
-
-        return null;
+        if (bonus.compareTo(valorDebito) < 0)
+        {
+            return bonus;
+        }
+        else {
+            return valorDebito;
+        }
     }
 }
