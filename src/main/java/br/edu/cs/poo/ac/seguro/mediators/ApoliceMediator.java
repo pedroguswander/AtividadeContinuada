@@ -33,6 +33,58 @@ public class ApoliceMediator {
     }
 
     public RetornoInclusaoApolice incluirApolice(DadosVeiculo dados) {
+        if (dados == null) {
+            return new RetornoInclusaoApolice(null,
+                    "Dados do veículo devem ser informados");
+       }
+        else if (daoSegPes.buscar(dados.getCpfOuCnpj()) == null) {
+            return new RetornoInclusaoApolice(null,
+                    "CPF inexistente no cadastro de pessoas");
+        }
+        else if (daoSegEmp.buscar(dados.getCpfOuCnpj()) == null) {
+            return new RetornoInclusaoApolice(null,
+                    "CNPJ inexistente no cadastro de pessoas");
+        }
+
+        else if (dados.getCodigoCategoria() > 5)
+        {
+            return new RetornoInclusaoApolice(null,
+                    "Categoria inválida");
+        }
+
+        else if (dados.getValorMaximoSegurado() == null) {
+            return new RetornoInclusaoApolice(null,
+                    "Valor máximo segurado deve ser informado");
+        }
+
+        else if (dados.getValorMaximoSegurado().compareTo(new BigDecimal("100")) > 0 ||
+                dados.getValorMaximoSegurado().compareTo(new BigDecimal("75")) < 0) {
+            return new RetornoInclusaoApolice(null,
+                    "Valor máximo segurado deve estar entre 75% e 100% do valor do carro encontrado na categoria");
+        }
+
+        else if (dados.getCpfOuCnpj() == null || dados.getCpfOuCnpj().trim().isEmpty()) {
+            return new RetornoInclusaoApolice(null,
+                    "CPF ou CNPJ deve ser informado");
+        }
+        else if (dados.getPlaca() == null || dados.getPlaca().trim().isEmpty()) {
+            return new RetornoInclusaoApolice(null,
+                    "Placa do veículo deve ser informada");
+
+        } else if (dados.getCpfOuCnpj().length() == 11) {
+            return new RetornoInclusaoApolice(null,
+                    "CPF inválido");
+        }
+
+        else if (dados.getCpfOuCnpj().length() == 14) {
+            return new RetornoInclusaoApolice(null,
+                    "CNPJ inválido");
+        }
+        else if (dados.getAno() < 2020 || dados.getAno() > 2025) {
+            return new RetornoInclusaoApolice(null,
+                    "Ano tem que estar entre 2020 e 2025, incluindo estes");
+        }
+
         return null;
     }
 

@@ -69,12 +69,15 @@ public class SeguradoMediator {
         {
             return "Tamanho da sigla do estado deve ser 2 caracteres";
         }
+        else if (endereco.getPais() == null || endereco.getPais().isBlank()) {
+            return "País deve ser informado";
+        }
         else if (endereco.getPais().length() > 40)
         {
             return "Tamanho do país deve ser no máximo 40 caracteres";
         }
-        else if (endereco.getPais() == null || endereco.getPais().isBlank()) {
-            return "País deve ser informado";
+        else if (endereco.getNumero() == null || endereco.getNumero().isBlank() || endereco.getNumero().length() <= 2) {
+
         }
         else if (endereco.getNumero().length() > 20)
         {
