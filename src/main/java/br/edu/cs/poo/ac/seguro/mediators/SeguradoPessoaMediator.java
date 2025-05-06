@@ -26,36 +26,15 @@ public class SeguradoPessoaMediator {
     public String validarCpf(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) {
             return "CPF deve ser informado";
-        }else if (!ValidadorCpfCnpj.ehCpfValido(cpf)) {
-            return "CPF deve ter 11 caracteres";
-        }
-        try {
-            int soma1 = 0, soma2 = 0;
-            for (int i = 0; i < 9; i++) {
-                int digito = Character.getNumericValue(cpf.charAt(i));
-                soma1 += digito * (10 - i);
-                soma2 += digito * (11 - i);
+        } else if (!ValidadorCpfCnpj.ehCpfValido(cpf)) {
+            if (cpf.length() != 11) {
+                return "CPF deve ter 11 caracteres";
             }
-
-            int dv1 = soma1 % 11;
-            dv1 = dv1 < 2 ? 0 : 11 - dv1;
-
-            soma2 += dv1 * 2;
-            int dv2 = soma2 % 11;
-            dv2 = dv2 < 2 ? 0 : 11 - dv2;
-
-            int digito10 = Character.getNumericValue(cpf.charAt(9));
-            int digito11 = Character.getNumericValue(cpf.charAt(10));
-
-            if (dv1 != digito10 || dv2 != digito11) {
-                return "CPF com dígito inválido";
-            }
-
-        } catch (NumberFormatException e) {
             return "CPF com dígito inválido";
         }
         return null;
     }
+
     public String validarRenda(double renda) {
         if (renda < 0) {
             return "Renda deve ser maior ou igual à zero";
