@@ -46,7 +46,39 @@ public class ApoliceMediator {
                     "Placa do veículo deve ser informada");
 
         }
-        else if (dados.getCpfOuCnpj().length() == 11) {
+        if (dados.getAno() < 2020 || dados.getAno() > 2025) {
+            return new RetornoInclusaoApolice(null,
+                    "Ano tem que estar entre 2020 e 2025, incluindo estes");
+        }
+        if (dados.getValorMaximoSegurado() == null) {
+            return new RetornoInclusaoApolice(null,
+                    "Valor máximo segurado deve ser informado");
+        }
+        if (dados.getCodigoCategoria() > 5)
+        {
+            return new RetornoInclusaoApolice(null,
+                    "Categoria inválida");
+        }
+
+        else {
+            CategoriaVeiculo categoria = CategoriaVeiculo.values()[dados.getCodigoCategoria()-1];
+            for (PrecoAno p : categoria.getPrecosAnos()) {
+                if (p.getAno() == dados.getAno()) {
+                    double precoBase = p.getPreco() * 100; // Converte para percentual (ex: 0.8 → 80)
+                    BigDecimal percentualSegurado = dados.getValorMaximoSegurado()
+                            .divide(BigDecimal.valueOf(precoBase), 2, RoundingMode.HALF_UP); // 2 casas decimais
+
+                    if (percentualSegurado.compareTo(new BigDecimal("100")) > 0 ||
+                            percentualSegurado.compareTo(new BigDecimal("75")) < 0) {
+                        return new RetornoInclusaoApolice(
+                                null,
+                                "Valor máximo segurado deve estar entre 75% e 100% do valor do carro encontrado na categoria"
+                        );
+                    }
+                }
+            }
+        }
+        if (dados.getCpfOuCnpj().length() == 11) {
             if (!ValidadorCpfCnpj.ehCpfValido(dados.getCpfOuCnpj())){
                 return new RetornoInclusaoApolice(null,
                         "CPF inválido");
@@ -69,43 +101,7 @@ public class ApoliceMediator {
 
         }
 
-        if (dados.getCodigoCategoria() > 5)
-        {
-            return new RetornoInclusaoApolice(null,
-                    "Categoria inválida");
-        }
 
-
-
-        if (dados.getAno() < 2020 || dados.getAno() > 2025) {
-            return new RetornoInclusaoApolice(null,
-                    "Ano tem que estar entre 2020 e 2025, incluindo estes");
-        }
-
-
-        if (dados.getValorMaximoSegurado() == null) {
-            return new RetornoInclusaoApolice(null,
-                    "Valor máximo segurado deve ser informado");
-        }
-        else {
-            CategoriaVeiculo categoria = CategoriaVeiculo.values()[dados.getCodigoCategoria()-1];
-            for (PrecoAno p : categoria.getPrecosAnos()) {
-                if (p.getAno() == dados.getAno()) {
-                    double precoBase = p.getPreco() * 100; // Converte para percentual (ex: 0.8 → 80)
-                    BigDecimal percentualSegurado = dados.getValorMaximoSegurado()
-                            .divide(BigDecimal.valueOf(precoBase), 2, RoundingMode.HALF_UP); // 2 casas decimais
-
-                    if (percentualSegurado.compareTo(new BigDecimal("100")) > 0 ||
-                            percentualSegurado.compareTo(new BigDecimal("75")) < 0) {
-                        // Fora do intervalo permitido (75% a 100%)
-                        return new RetornoInclusaoApolice(
-                                null,
-                                "Valor máximo segurado deve estar entre 75% e 100% do valor do carro encontrado na categoria"
-                        );
-                    }
-                }
-            }
-        }
         Veiculo veiculo = daoVel.buscar((dados.getPlaca()));
         String numeroApolice = dados.getCpfOuCnpj() + "000" +dados.getAno() + dados.getPlaca();
         Apolice apolice = daoApo.buscar(numeroApolice);
