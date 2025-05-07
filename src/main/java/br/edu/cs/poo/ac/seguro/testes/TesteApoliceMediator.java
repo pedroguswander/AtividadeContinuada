@@ -111,7 +111,10 @@ public class TesteApoliceMediator extends TesteMediator {
     }
     @Test
     public void test006() {
+
         DadosVeiculo dr = new DadosVeiculo("07255431089", "KKK0019", 2020, null, 2);
+        System.out.println(mediator.incluirApolice(dr).getMensagemErro());
+
         Assertions.assertEquals("Valor máximo segurado deve ser informado",
                 mediator.incluirApolice(dr).getMensagemErro());
         dr = new DadosVeiculo("07255431089", "KKK0019", 2025, new BigDecimal("60002.0"), 2);
