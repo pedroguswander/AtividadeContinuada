@@ -43,10 +43,6 @@ public class TesteApoliceMediator extends TesteMediator {
         FileUtils.limparDiretorio("." + sep + Sinistro.class.getSimpleName());
     }
 
-    /*
-     * Para uso interno! Este teste sempre vai passar, pois testa o construtor da
-     * classe RetornoInclusaoApolice.
-     */
     @Test
     public void test000() {
         try {

@@ -46,12 +46,12 @@ public class ApoliceMediator {
                     "Placa do veículo deve ser informada");
 
         }
-        else if (dados.getCpfOuCnpj().length() != 11) {
+        else if (dados.getCpfOuCnpj().length() == 11) {
             return new RetornoInclusaoApolice(null,
                     "CPF inválido");
         }
 
-        else if (dados.getCpfOuCnpj().length() != 14) {
+        else if (dados.getCpfOuCnpj().length() == 14) {
             return new RetornoInclusaoApolice(null,
                     "CNPJ inválido");
         }
