@@ -1,11 +1,11 @@
 package br.edu.cs.poo.ac.seguro.mediators;
 
 import br.edu.cs.poo.ac.seguro.daos.*;
-import br.edu.cs.poo.ac.seguro.entidades.Apolice;
-import br.edu.cs.poo.ac.seguro.entidades.Sinistro;
+import br.edu.cs.poo.ac.seguro.entidades.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class ApoliceMediator {
     private SeguradoPessoaDAO daoSegPes;
@@ -47,44 +47,68 @@ public class ApoliceMediator {
 
         }
         else if (dados.getCpfOuCnpj().length() == 11) {
-            return new RetornoInclusaoApolice(null,
-                    "CPF inválido");
+            if (!ValidadorCpfCnpj.ehCpfValido(dados.getCpfOuCnpj())){
+                return new RetornoInclusaoApolice(null,
+                        "CPF inválido");
+            }
         }
 
         else if (dados.getCpfOuCnpj().length() == 14) {
-            return new RetornoInclusaoApolice(null,
-                    "CNPJ inválido");
-        }
-        else if (daoSegPes.buscar(dados.getCpfOuCnpj()) == null) {
-            return new RetornoInclusaoApolice(null,
-                    "CPF inexistente no cadastro de pessoas");
-        }
-        else if (daoSegEmp.buscar(dados.getCpfOuCnpj()) == null) {
-            return new RetornoInclusaoApolice(null,
-                    "CNPJ inexistente no cadastro de pessoas");
+            if (!ValidadorCpfCnpj.ehCnpjValido(dados.getCpfOuCnpj())){
+                return new RetornoInclusaoApolice(null,
+                        "CNPJ inválido");
+            }
+
         }
 
-        else if (dados.getCodigoCategoria() > 5)
+        if (dados.getCodigoCategoria() > 5)
         {
             return new RetornoInclusaoApolice(null,
                     "Categoria inválida");
         }
 
-        else if (dados.getValorMaximoSegurado() == null) {
+
+
+        if (dados.getAno() < 2020 || dados.getAno() > 2025) {
+            return new RetornoInclusaoApolice(null,
+                    "Ano tem que estar entre 2020 e 2025, incluindo estes");
+        }
+
+
+        if (dados.getValorMaximoSegurado() == null) {
             return new RetornoInclusaoApolice(null,
                     "Valor máximo segurado deve ser informado");
         }
+        else {
+            Veiculo vel = daoVel.buscar(dados.getPlaca());
 
-        else if (dados.getValorMaximoSegurado().compareTo(new BigDecimal("100")) > 0 ||
-                dados.getValorMaximoSegurado().compareTo(new BigDecimal("75")) < 0) {
-            return new RetornoInclusaoApolice(null,
-                    "Valor máximo segurado deve estar entre 75% e 100% do valor do carro encontrado na categoria");
+            PrecoAno[] precos = vel.getCategoria().getPrecosAnos();
+            for (PrecoAno p : precos) {
+                if (p.getAno() == dados.getAno()) {
+                    double precoBase = p.getPreco() * 100; // Converte para percentual (ex: 0.8 → 80)
+                    BigDecimal percentualSegurado = dados.getValorMaximoSegurado()
+                            .divide(BigDecimal.valueOf(precoBase), 2, RoundingMode.HALF_UP); // 2 casas decimais
+
+                    // Comparação usando compareTo (evita problemas de precisão)
+                    if (percentualSegurado.compareTo(new BigDecimal("100")) > 0 ||
+                            percentualSegurado.compareTo(new BigDecimal("75")) < 0) {
+                        // Fora do intervalo permitido (75% a 100%)
+                        return new RetornoInclusaoApolice(
+                                null,
+                                "Valor máximo segurado deve estar entre 75% e 100% do valor do carro"
+                        );
+                    }
+                }
+            }
         }
 
-
-        else if (dados.getAno() < 2020 || dados.getAno() > 2025) {
+        if (daoSegPes.buscar(dados.getCpfOuCnpj()) == null) {
             return new RetornoInclusaoApolice(null,
-                    "Ano tem que estar entre 2020 e 2025, incluindo estes");
+                    "CPF inexistente no cadastro de pessoas");
+        }
+        if (daoSegEmp.buscar(dados.getCpfOuCnpj()) == null) {
+            return new RetornoInclusaoApolice(null,
+                    "CNPJ inexistente no cadastro de pessoas");
         }
 
         return null;
