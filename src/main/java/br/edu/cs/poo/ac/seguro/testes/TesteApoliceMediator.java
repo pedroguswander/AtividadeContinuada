@@ -307,6 +307,7 @@ public class TesteApoliceMediator extends TesteMediator {
         Assertions.assertNotNull(ap);
         Assertions.assertTrue(ComparadorObjetosSerial.compareObjectsSerial(apEsp, ap));
         SeguradoPessoa spBusc = (SeguradoPessoa)cadPessoa.buscar(cpf);
+        System.out.println(spBusc);
         Assertions.assertNotNull(spBusc);
         Assertions.assertEquals(new BigDecimal("1483.00"), spBusc.getBonus());
     }

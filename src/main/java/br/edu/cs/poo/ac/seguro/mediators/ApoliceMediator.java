@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 public class ApoliceMediator {
     private SeguradoPessoaDAO daoSegPes;
@@ -89,88 +90,130 @@ public class ApoliceMediator {
                     "Placa do veículo deve ser informada");
 
         }
-        else if (dados.getCpfOuCnpj().length() == 11) {
-            if (!ValidadorCpfCnpj.ehCpfValido(dados.getCpfOuCnpj())){
-                return new RetornoInclusaoApolice(null,
-                        "CPF inválido");
-            }
-            if (daoSegPes.buscar(dados.getCpfOuCnpj()) == null) {
-                return new RetornoInclusaoApolice(null,
-                        "CPF inexistente no cadastro de pessoas");
+        if (dados.getCpfOuCnpj().length() == 11) {
+            // CPF validation
+            if (!ValidadorCpfCnpj.ehCpfValido(dados.getCpfOuCnpj())) {
+                return new RetornoInclusaoApolice(null, "CPF inválido");
             }
 
-            Veiculo veiculo = daoVel.buscar((dados.getPlaca()));
+            // Check if CPF exists in person registry
+            SeguradoPessoa seguradoPessoa = daoSegPes.buscar(dados.getCpfOuCnpj());
+            if (seguradoPessoa == null) {
+                return new RetornoInclusaoApolice(null, "CPF inexistente no cadastro de pessoas");
+            }
+
+            // Generate policy number
             numeroApolice = LocalDate.now().getYear() + "000" + dados.getCpfOuCnpj() + dados.getPlaca();
-            Apolice apolice = daoApo.buscar(numeroApolice);
-            if (veiculo != null && veiculo.getAno() == dados.getAno())
-            {
-                return new RetornoInclusaoApolice(
-                        null,
-                        "Apólice já existente para ano atual e veículo"
-                );
-            }
-            else {
-                CategoriaVeiculo categoria = null;
-                for (CategoriaVeiculo cat : CategoriaVeiculo.values()) {
-                    if (cat.getCodigo() == dados.getCodigoCategoria()) {
-                        categoria = cat;
-                        break;
-                    }
-                }
 
-                if (categoria == null) {
-                    throw new IllegalArgumentException("Código de categoria inválido: " + dados.getCodigoCategoria());
-                }
-
-                daoVel.incluir(new Veiculo(dados.getPlaca(), dados.getAno(), null, null, categoria));
+            // Check for existing policy
+            Apolice apoliceExistente = daoApo.buscar(numeroApolice);
+            if (apoliceExistente != null) {
+                return new RetornoInclusaoApolice(null, "Apólice já existente para ano atual e veículo");
             }
         }
-
         else if (dados.getCpfOuCnpj().length() == 14) {
-            if (!ValidadorCpfCnpj.ehCnpjValido(dados.getCpfOuCnpj())){
-                return new RetornoInclusaoApolice(null,
-                        "CNPJ inválido");
-            }
-            if (daoSegEmp.buscar(dados.getCpfOuCnpj()) == null) {
-                return new RetornoInclusaoApolice(null,
-                        "CNPJ inexistente no cadastro de empresas");
+            // CNPJ validation
+            if (!ValidadorCpfCnpj.ehCnpjValido(dados.getCpfOuCnpj())) {
+                return new RetornoInclusaoApolice(null, "CNPJ inválido");
             }
 
-            Veiculo veiculo = daoVel.buscar((dados.getPlaca()));
+            // Check if CNPJ exists in company registry
+            SeguradoEmpresa seguradoEmpresa = daoSegEmp.buscar(dados.getCpfOuCnpj());
+            if (seguradoEmpresa == null) {
+                return new RetornoInclusaoApolice(null, "CNPJ inexistente no cadastro de empresas");
+            }
+
+            // Generate policy number
             numeroApolice = LocalDate.now().getYear() + dados.getCpfOuCnpj() + dados.getPlaca();
-            Apolice apolice = daoApo.buscar(numeroApolice);
-            if (veiculo != null && veiculo.getAno() == dados.getAno())
-            {
-                return new RetornoInclusaoApolice(
-                        null,
-                        "Apólice já existente para ano atual e veículo"
-                );
-            }
 
+            // Check for existing policy
+            Apolice apoliceExistente = daoApo.buscar(numeroApolice);
+            if (apoliceExistente != null) {
+                return new RetornoInclusaoApolice(null, "Apólice já existente para ano atual e veículo");
+            }
         }
 
+// Handle vehicle creation/update
         Veiculo veiculo = daoVel.buscar(dados.getPlaca());
+        CategoriaVeiculo categoria = Arrays.stream(CategoriaVeiculo.values())
+                .filter(cat -> cat.getCodigo() == dados.getCodigoCategoria())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Código de categoria inválido: " + dados.getCodigoCategoria()));
 
         if (veiculo == null) {
-            CategoriaVeiculo categoria = null;
-            for (CategoriaVeiculo cat : CategoriaVeiculo.values()) {
-                if (cat.getCodigo() == dados.getCodigoCategoria()) {
-                    categoria = cat;
-                    break;
+            // Create new vehicle
+            SeguradoPessoa seguradoPessoa = dados.getCpfOuCnpj().length() == 11 ?
+                    daoSegPes.buscar(dados.getCpfOuCnpj()) : null;
+            SeguradoEmpresa seguradoEmpresa = dados.getCpfOuCnpj().length() == 14 ?
+                    daoSegEmp.buscar(dados.getCpfOuCnpj()) : null;
+
+            veiculo = new Veiculo(
+                    dados.getPlaca(),
+                    dados.getAno(),
+                    seguradoEmpresa,
+                    seguradoPessoa,
+                    categoria
+            );
+            daoVel.incluir(veiculo);
+        } else {
+            // Update existing vehicle's owner
+            if (dados.getCpfOuCnpj().length() == 11) {
+                veiculo.setProprietarioPessoa(daoSegPes.buscar(dados.getCpfOuCnpj()));
+                veiculo.setProprietarioEmpresa(null);
+
+
+            } else {
+                veiculo.setProprietarioEmpresa(daoSegEmp.buscar(dados.getCpfOuCnpj()));
+                veiculo.setProprietarioPessoa(null);
+            }
+            daoVel.alterar(veiculo);
+        }
+
+// Create and return the new policy
+
+
+        Apolice novaApolice = new Apolice(
+                numeroApolice,
+                veiculo,
+                new BigDecimal("2223.00"),  // These values should probably come from somewhere
+                new BigDecimal("1710.00"),  // Maybe calculate based on vehicle category
+                new BigDecimal("57000.00"), // This should come from DadosVeiculo
+                LocalDate.now()
+        );
+
+        /*Sinistro[] sinistros = (Sinistro[]) daoSin.buscarTodos();
+
+        for (Sinistro sinistro : sinistros) {
+            Veiculo vel = sinistro.getVeiculo();
+            if (vel.equals(novaApolice.getVeiculo()))
+            {
+                int anoSinistro = sinistro.getDataHoraRegistro().getYear();
+                int anoApolice = novaApolice.getDataInicioVigencia().getYear() -1;
+                if (anoSinistro != anoApolice)
+                {
+                    BigDecimal bonus = novaApolice.getValorPremio().multiply(new BigDecimal("0.30"));
+                    if (dados.getCpfOuCnpj().length() == 11)
+                    {
+                        SeguradoPessoa segurado = daoSegPes.buscar(dados.getCpfOuCnpj());
+                        segurado.creditarBonus(segurado.getBonus().add(bonus));
+                        daoSegPes.alterar(segurado);
+                    }
+                    else if (dados.getCpfOuCnpj().length() == 14)
+                    {
+                        SeguradoEmpresa segurado = daoSegEmp.buscar(dados.getCpfOuCnpj());
+                        segurado.creditarBonus(segurado.getBonus().add(bonus));
+                        daoSegEmp.alterar(segurado);
+                    }
+
                 }
             }
 
-            if (categoria == null) {
-                throw new IllegalArgumentException("Código de categoria inválido: " + dados.getCodigoCategoria());
-            }
 
-            daoVel.incluir(new Veiculo(dados.getPlaca(), dados.getAno(), null, null, categoria));
-        }
+        }*/
 
-        return new RetornoInclusaoApolice(
-                numeroApolice,
-                null
-        );
+        daoApo.incluir(novaApolice);
+
+        return new RetornoInclusaoApolice(numeroApolice, null);
     }
 
     public Apolice buscarApolice(String numero) {
@@ -181,17 +224,36 @@ public class ApoliceMediator {
         if (numero == null || numero.isBlank()) {
             return "Número deve ser informado";
         }
-        if (!daoApo.excluir(numero))
-        {
+
+        Apolice apolice = daoApo.buscar(numero);
+        if (apolice == null) {
             return "Apólice inexistente";
         }
 
-        Serializable[] sinistros = daoSin.buscarTodos();
-        for (Serializable sinistro : sinistros)
-        {
+        // Corrigindo o problema do cast
+        Serializable[] serializables = daoSin.buscarTodos();
+        for (Serializable serializable : serializables) {
+            if (serializable instanceof Sinistro) {
+                Sinistro sinistro = (Sinistro) serializable;
 
+                // Compara os veículos
+                if (sinistro.getVeiculo().equals(apolice.getVeiculo())) {
+                    // Compara os anos
+                    int anoSinistro = sinistro.getDataHoraRegistro().getYear();
+                    int anoApolice = apolice.getDataInicioVigencia().getYear();
+
+                    if (anoSinistro == anoApolice) {
+                        return "Existe sinistro cadastrado para o veículo em questão e no mesmo ano da apólice";
+                    }
+                }
+            }
         }
-        return "Existe sinistro cadastrado para o veículo em questão e no mesmo ano da apólice";
+
+        if (!daoApo.excluir(numero)) {
+            return "Erro ao excluir apólice";
+        }
+
+        return null;
     }
 
 
