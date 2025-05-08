@@ -190,6 +190,7 @@ public class TesteApoliceMediator extends TesteMediator {
         Assertions.assertEquals(numero, ret.getNumeroApolice());
         Veiculo velEsp = new Veiculo(placa, ano, null, sp, CategoriaVeiculo.INTERMEDIARIO);
         Veiculo vel = (Veiculo)cadVeiculo.buscar(placa);
+        System.out.println(vel);
         Assertions.assertNotNull(vel);
         Assertions.assertTrue(ComparadorObjetosSerial.compareObjectsSerial(velEsp, vel));
         Apolice apEsp = new Apolice(numero, velEsp, new BigDecimal("2223.00"), new BigDecimal("1710.00"),

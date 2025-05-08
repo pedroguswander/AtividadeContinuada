@@ -6,6 +6,7 @@ import br.edu.cs.poo.ac.seguro.entidades.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 
 public class ApoliceMediator {
     private SeguradoPessoaDAO daoSegPes;
@@ -33,6 +34,8 @@ public class ApoliceMediator {
     }
 
     public RetornoInclusaoApolice incluirApolice(DadosVeiculo dados) {
+        String numeroApolice = "";
+
         if (dados == null) {
             return new RetornoInclusaoApolice(null,
                     "Dados do veículo devem ser informados");
@@ -95,6 +98,32 @@ public class ApoliceMediator {
                 return new RetornoInclusaoApolice(null,
                         "CPF inexistente no cadastro de pessoas");
             }
+
+            Veiculo veiculo = daoVel.buscar((dados.getPlaca()));
+            numeroApolice = LocalDate.now().getYear() + "000" + dados.getCpfOuCnpj() + dados.getPlaca();
+            Apolice apolice = daoApo.buscar(numeroApolice);
+            if (veiculo != null && veiculo.getAno() == dados.getAno())
+            {
+                return new RetornoInclusaoApolice(
+                        null,
+                        "Apólice já existente para ano atual e veículo"
+                );
+            }
+            else {
+                CategoriaVeiculo categoria = null;
+                for (CategoriaVeiculo cat : CategoriaVeiculo.values()) {
+                    if (cat.getCodigo() == dados.getCodigoCategoria()) {
+                        categoria = cat;
+                        break;
+                    }
+                }
+
+                if (categoria == null) {
+                    throw new IllegalArgumentException("Código de categoria inválido: " + dados.getCodigoCategoria());
+                }
+
+                daoVel.incluir(new Veiculo(dados.getPlaca(), dados.getAno(), null, null, categoria));
+            }
         }
 
         else if (dados.getCpfOuCnpj().length() == 14) {
@@ -107,21 +136,41 @@ public class ApoliceMediator {
                         "CNPJ inexistente no cadastro de empresas");
             }
 
+            Veiculo veiculo = daoVel.buscar((dados.getPlaca()));
+            numeroApolice = LocalDate.now().getYear() + dados.getCpfOuCnpj() + dados.getPlaca();
+            Apolice apolice = daoApo.buscar(numeroApolice);
+            if (veiculo != null && veiculo.getAno() == dados.getAno())
+            {
+                return new RetornoInclusaoApolice(
+                        null,
+                        "Apólice já existente para ano atual e veículo"
+                );
+            }
+
         }
 
+        Veiculo veiculo = daoVel.buscar(dados.getPlaca());
 
-        Veiculo veiculo = daoVel.buscar((dados.getPlaca()));
-        String numeroApolice = dados.getCpfOuCnpj() + "000" +dados.getAno() + dados.getPlaca();
-        Apolice apolice = daoApo.buscar(numeroApolice);
-        if (apolice.getDataInicioVigencia().getYear() == dados.getAno())
-        {
-            return new RetornoInclusaoApolice(
-                    null,
-                    "Apólice já existente para ano atual e veículo"
-                    );
+        if (veiculo == null) {
+            CategoriaVeiculo categoria = null;
+            for (CategoriaVeiculo cat : CategoriaVeiculo.values()) {
+                if (cat.getCodigo() == dados.getCodigoCategoria()) {
+                    categoria = cat;
+                    break;
+                }
+            }
+
+            if (categoria == null) {
+                throw new IllegalArgumentException("Código de categoria inválido: " + dados.getCodigoCategoria());
+            }
+
+            daoVel.incluir(new Veiculo(dados.getPlaca(), dados.getAno(), null, null, categoria));
         }
 
-        return null;
+        return new RetornoInclusaoApolice(
+                numeroApolice,
+                null
+        );
     }
 
     public Apolice buscarApolice(String numero) {
