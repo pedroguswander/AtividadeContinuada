@@ -10,6 +10,7 @@ public class SeguradoPessoa extends Segurado implements Serializable {
     public SeguradoPessoa() {
         super();
     }
+
     public SeguradoPessoa(
         String nome,
         Endereco endereco,
@@ -21,6 +22,16 @@ public class SeguradoPessoa extends Segurado implements Serializable {
         super(nome, endereco, dataNascimento, bonus);
         this.cpf = cpf;
         this.renda = renda;
+    }
+
+    @Override
+    public boolean isEmpresa() {
+        return false;
+    }
+
+    @Override
+    public String getCnpj() {
+        return "";
     }
 
     public String getCpf() {

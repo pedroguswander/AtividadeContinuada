@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 
-public class Segurado {
+public abstract class Segurado {
     private String nome;
     private Endereco endereco;
     private LocalDate dataCriacao;
@@ -52,6 +52,11 @@ public class Segurado {
     public int getIdade() {
         return Period.between(this.dataCriacao, LocalDate.now()).getYears();
     }
+
+    public abstract boolean isEmpresa();
+
+    public abstract String getCnpj();
+    public abstract String getCpf();
 
     public void creditarBonus(BigDecimal valor) {
         if (valor != null && valor.compareTo(BigDecimal.ZERO) > 0) {

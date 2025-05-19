@@ -27,9 +27,18 @@ public class SeguradoEmpresa extends Segurado implements Serializable {
         this.ehLocadoraDeVeiculos = ehLocadoraDeVeiculos;
     }
 
+    @Override
+    public boolean isEmpresa() {
+        return true;
+    }
 
     public String getCnpj() {
         return cnpj;
+    }
+
+    @Override
+    public String getCpf() {
+        return "";
     }
 
     public void setCnpj(String cnpj) {
