@@ -77,10 +77,6 @@ public class SeguradoEmpresaMediator {
         return null;
     }
     public SeguradoEmpresa buscarSeguradoEmpresa(String cnpj) {
-        String erro = validarCnpj(cnpj);
-        if (erro != null) {
-            return null;
-        }
 
         return seguradoEmpresaDAO.buscar(cnpj);
     }
