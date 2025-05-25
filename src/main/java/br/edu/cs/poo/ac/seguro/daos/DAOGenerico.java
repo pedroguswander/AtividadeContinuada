@@ -13,7 +13,7 @@ public abstract class DAOGenerico<D extends Registro> {
     public abstract Class<D> getClasseEntidade();
 
     public boolean incluir(D entidade) {
-        if (buscar(entidade) != null) {
+        if (buscar(entidade.getIdUnico()) != null) {
             return false;
         }
         cadastro.incluir(entidade, entidade.getIdUnico());
@@ -21,24 +21,24 @@ public abstract class DAOGenerico<D extends Registro> {
     }
 
     public boolean alterar(D entidade) {
-        if (buscar(entidade) == null) {
+        if (buscar(entidade.getIdUnico()) == null) {
             return false;
         }
         cadastro.alterar(entidade, entidade.getIdUnico());
         return true;
     }
 
-    public D buscar(D entidade)
+    public D buscar(String idUnico)
     {
-        return (D) cadastro.buscar(entidade.getIdUnico());
+        return (D) cadastro.buscar(idUnico);
     }
 
-    public boolean excluir(D entidade)
+    public boolean excluir(String idUnico)
     {
-        if (buscar(entidade) == null) {
+        if (buscar(idUnico) == null) {
             return false;
         }
-        cadastro.excluir(entidade.getIdUnico());
+        cadastro.excluir(idUnico);
         return true;
     }
 

@@ -55,16 +55,14 @@ public class TesteSeguradoEmpresaMediator extends TesteMediator {
     @Test
     public void test07() {
         String cnpj = "11851715000174";
-        Endereco end = new Endereco("Rua A", "51020002", "22", "ap 201", "Brasil", "PE", "Recife");
+        Endereco end = new Endereco("Rua A", "51020002", "22", "ap 201", "Brasil", "PE",
+                "Recife");
         SeguradoEmpresa seg = new SeguradoEmpresa("ACME LTDA", end, LocalDate.now(),
                 BigDecimal.ZERO, cnpj, 1000.0, false);
-
-        med.incluirSeguradoEmpresa(seg);
-
+        cadastro.incluir(seg, cnpj);
         SeguradoEmpresa segBuscado = med.buscarSeguradoEmpresa(cnpj);
         assertNotNull(segBuscado);
     }
-
     @Test
     public void test08() {
         String cnpj = "11851715000274";
@@ -125,7 +123,7 @@ public class TesteSeguradoEmpresaMediator extends TesteMediator {
         String ret = med.incluirSeguradoEmpresa(seg);
         assertEquals("CNPJ do segurado empresa já existente", ret);
         SeguradoEmpresa segBuscado = med.buscarSeguradoEmpresa(cnpj);
-        assertTrue(ComparadorObjetosSerial.compareObjectsSerial(seg, segBuscado));
+        assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(seg, segBuscado));
         assertNotNull(segBuscado);
     }
 
@@ -173,7 +171,7 @@ public class TesteSeguradoEmpresaMediator extends TesteMediator {
         assertEquals(null, ret);
         SeguradoEmpresa segBuscado = med.buscarSeguradoEmpresa(cnpj);
         assertNotNull(segBuscado);
-        assertTrue(ComparadorObjetosSerial.compareObjectsSerial(seg, segBuscado));
+        assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(seg, segBuscado));
     }
     @Test
     public void test14() {

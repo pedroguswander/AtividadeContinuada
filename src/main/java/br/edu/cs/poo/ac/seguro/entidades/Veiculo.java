@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Veiculo implements Serializable, Registro {
 	private String placa;
 	private int ano;
-	private Segurado propietario;
+	private Segurado proprietario;
 	//private SeguradoEmpresa proprietarioEmpresa;
 	//private SeguradoPessoa proprietarioPessoa;
 	private CategoriaVeiculo categoria;
@@ -19,7 +19,7 @@ public class Veiculo implements Serializable, Registro {
 	public Veiculo(String placa, int ano, Segurado segurado, CategoriaVeiculo categoria) {
 		this.placa = placa;
 		this.ano = ano;
-		this.propietario = segurado;
+		this.proprietario = segurado;
 		this.categoria = categoria;
 	}
 

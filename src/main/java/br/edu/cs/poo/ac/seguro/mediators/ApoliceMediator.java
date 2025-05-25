@@ -148,10 +148,10 @@ public class ApoliceMediator {
             daoVel.incluir(veiculo);
         } else {
             if (dados.getCpfOuCnpj().length() == 11) {
-                veiculo.setPropietario(daoSegPes.buscar(dados.getCpfOuCnpj()));
+                veiculo.setProprietario(daoSegPes.buscar(dados.getCpfOuCnpj()));
 
             } else {
-                veiculo.setPropietario(daoSegEmp.buscar(dados.getCpfOuCnpj()));
+                veiculo.setProprietario(daoSegEmp.buscar(dados.getCpfOuCnpj()));
             }
 
             daoVel.alterar(veiculo);
@@ -213,13 +213,13 @@ public class ApoliceMediator {
 
                 if (anoSinistro == anoAnterior) {
                     if (!seg.isEmpresa()) {
-                        if (veiculoSinistro.getPropietario().getCpf().equals(((SeguradoPessoa) seg).getCpf())) {
+                        if (veiculoSinistro.getProprietario().getCpf().equals(((SeguradoPessoa) seg).getCpf())) {
                             teveSinistroAnterior = true;
                             break;
                         }
                     }
                     if (seg.isEmpresa()) {
-                        if (veiculoSinistro.getPropietario().getCnpj().equals(((SeguradoEmpresa) seg).getCnpj())) {
+                        if (veiculoSinistro.getProprietario().getCnpj().equals(((SeguradoEmpresa) seg).getCnpj())) {
                             teveSinistroAnterior = true;
                             break;
                         }

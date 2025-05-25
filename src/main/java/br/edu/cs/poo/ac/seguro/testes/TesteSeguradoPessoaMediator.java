@@ -130,7 +130,7 @@ public class TesteSeguradoPessoaMediator extends TesteMediator {
         String ret = med.incluirSeguradoPessoa(seg);
         assertEquals("CPF do segurado pessoa já existente", ret);
         SeguradoPessoa segBuscado = med.buscarSeguradoPessoa(cpf);
-        assertTrue(ComparadorObjetosSerial.compareObjectsSerial(seg, segBuscado));
+        assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(seg, segBuscado));
         assertNotNull(segBuscado);
     }
 
@@ -176,7 +176,7 @@ public class TesteSeguradoPessoaMediator extends TesteMediator {
         assertEquals(null, ret);
         SeguradoPessoa segBuscado = med.buscarSeguradoPessoa(cpf);
         assertNotNull(segBuscado);
-        assertTrue(ComparadorObjetosSerial.compareObjectsSerial(seg, segBuscado));
+        assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(seg, segBuscado));
     }
     @Test
     public void test14() {
@@ -217,7 +217,7 @@ public class TesteSeguradoPessoaMediator extends TesteMediator {
                 BigDecimal.ZERO, cpfOri, 1000.0);
         cadastro.incluir(seg, cpfOri);
         String ret = med.excluirSeguradoPessoa(cpf);
-        assertEquals("CPF com dígito inválido", ret);
+        assertEquals("CPF do segurado pessoa não existente", ret);
         SeguradoPessoa segBuscado = med.buscarSeguradoPessoa(cpfOri);
         assertNotNull(segBuscado);
     }

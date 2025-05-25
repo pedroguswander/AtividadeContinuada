@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class SeguradoPessoa extends Segurado implements Serializable {
+public class SeguradoPessoa extends Segurado implements Serializable, Registro {
     private String cpf;
     private double renda;
     public SeguradoPessoa() {

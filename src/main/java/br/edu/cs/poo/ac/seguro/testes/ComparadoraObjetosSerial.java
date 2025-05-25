@@ -4,9 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-public class ComparadorObjetosSerial {
+class ComparadoraObjetosSerial {
     static boolean compareObjectsSerial(Serializable s1, Serializable s2) {
-        ByteArrayOutputStream bos1 = null;
+        ByteArrayOutputStream  bos1 = null;
         ByteArrayOutputStream  bos2 = null;
         ObjectOutputStream oos1 = null;
         ObjectOutputStream oos2 = null;

@@ -17,6 +17,9 @@ public class Sinistro implements Serializable, Registro {
 	private String usuarioRegistro;
 	private BigDecimal valorSinistro;
 	private TipoSinistro tipo;
+	private int sequencial;
+	private String numeroApolice;
+
 	public Sinistro(String numero, Veiculo veiculo, LocalDateTime dataHoraSinistro, LocalDateTime dataHoraRegistro,
 			String usuarioRegistro, BigDecimal valorSinistro, TipoSinistro tipo) {
 		super();

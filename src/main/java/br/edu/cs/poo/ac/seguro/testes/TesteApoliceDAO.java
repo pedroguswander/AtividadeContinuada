@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class TesteApoliceDAO extends ApoliceDAO {
+public class TesteApoliceDAO extends TesteDAO {
     private ApoliceDAO dao = new ApoliceDAO();
 
     protected Class getClasse() {
