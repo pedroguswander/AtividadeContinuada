@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Sinistro implements Serializable {
+public class Sinistro implements Serializable, Registro {
 	private String numero;
 	private Veiculo veiculo;
 	private LocalDateTime dataHoraSinistro;
@@ -28,6 +28,9 @@ public class Sinistro implements Serializable {
 		this.valorSinistro = valorSinistro;
 		this.tipo = tipo;
 	}
-	
-	
+
+	@Override
+	public String getIdUnico() {
+		return numero;
+	}
 }

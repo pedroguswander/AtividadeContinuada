@@ -68,4 +68,9 @@ public class SeguradoEmpresa extends Segurado implements Serializable {
     public void setDataAbertura(LocalDate dataAbertura) {
         super.setDataCriacao(dataAbertura);
     }
+
+    @Override
+    public String getIdUnico() {
+        return cnpj;
+    }
 }

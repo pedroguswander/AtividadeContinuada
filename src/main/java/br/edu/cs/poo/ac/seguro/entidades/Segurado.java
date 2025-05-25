@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 
-public abstract class Segurado {
+public abstract class Segurado implements Registro {
     private String nome;
     private Endereco endereco;
     private LocalDate dataCriacao;

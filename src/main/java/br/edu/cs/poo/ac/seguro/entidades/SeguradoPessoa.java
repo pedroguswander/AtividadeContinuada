@@ -56,4 +56,9 @@ public class SeguradoPessoa extends Segurado implements Serializable {
     public void setDataNascimento(LocalDate dataNascimento) {
         super.setDataCriacao(dataNascimento);
     }
+
+    @Override
+    public String getIdUnico() {
+        return cpf;
+    }
 }

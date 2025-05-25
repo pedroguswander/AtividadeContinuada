@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Apolice implements Serializable {
+public class Apolice implements Serializable, Registro {
 	private String numero;
 	private Veiculo veiculo;
 	private BigDecimal valorFranquia;
@@ -26,6 +26,10 @@ public class Apolice implements Serializable {
 		this.valorMaximoSegurado = valorMaximoSegurado;
 		this.dataInicioVigencia = dataInicioVigencia;
 	}
-	
-	
+
+
+	@Override
+	public String getIdUnico() {
+		return numero;
+	}
 }
