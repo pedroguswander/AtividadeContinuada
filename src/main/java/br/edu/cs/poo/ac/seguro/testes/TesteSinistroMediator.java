@@ -62,6 +62,7 @@ public class TesteSinistroMediator extends TesteMediator {
             Assertions.fail();
         } catch (ExcecaoValidacaoDados e) {
             List<String> msgs = e.getMensagens();
+            System.out.println(msgs);
             Assertions.assertNotNull(msgs);
             Assertions.assertEquals(5, msgs.size());
             Assertions.assertEquals("Data/hora do sinistro deve ser informada", msgs.get(0));
