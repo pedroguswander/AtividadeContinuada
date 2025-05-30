@@ -3,6 +3,9 @@ package br.edu.cs.poo.ac.seguro.daos;
 import br.edu.cesarschool.next.oo.persistenciaobjetos.CadastroObjetos;
 import br.edu.cs.poo.ac.seguro.entidades.Registro;
 
+import java.io.Serializable;
+import java.util.Arrays;
+
 public abstract class DAOGenerico<D extends Registro> {
     private CadastroObjetos cadastro;
 
@@ -44,6 +47,8 @@ public abstract class DAOGenerico<D extends Registro> {
 
     public Registro[] buscarTodos()
     {
-        return (Registro[]) cadastro.buscarTodos();
+        return Arrays.stream(cadastro.buscarTodos(getClasseEntidade()))
+                .map(Registro.class::cast)
+                .toArray(Registro[]::new);
     }
 }
